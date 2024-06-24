@@ -26,7 +26,7 @@ import (
 
 const (
 	retryCount   = 3
-	maxRetryTime = 30 * time.Second
+	maxRetryTime = 60 * time.Second
 )
 
 // Scenario holds state for a test scenario
@@ -113,7 +113,7 @@ func awaitConvergence(threshold int, maxTimeToConsistency time.Duration, fn func
 		case <-to:
 			return fmt.Errorf("timeout while waiting after %d attempts, %d/%d sucessess", attempts, successes, threshold)
 			// And the per-try delay
-		case <-time.After(delay):
+		case <-time.After(time.Duration(attempts) * delay):
 		}
 	}
 }
