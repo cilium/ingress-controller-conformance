@@ -65,6 +65,7 @@ func TestMain(m *testing.M) {
 	flag.DurationVar(&kubernetes.WaitForEndpointsTimeout, "wait-time-for-ready", 5*time.Minute, "Maximum wait time for ready endpoints")
 	flag.BoolVar(&http.EnableDebug, "enable-http-debug", false, "Enable dump of requests and responses of HTTP requests (useful for debug)")
 	flag.BoolVar(&kubernetes.EnableOutputYamlDefinitions, "enable-output-yaml-definitions", false, "Dump yaml definitions of Kubernetes objects before creation")
+	flag.DurationVar(&http.HTTPClientTimeout, "http-client-timeout", 30*time.Second, "A time limit for requests made by a client")
 
 	flag.Parse()
 

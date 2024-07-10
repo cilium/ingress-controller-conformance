@@ -24,9 +24,8 @@ import (
 	"sigs.k8s.io/ingress-controller-conformance/test/http"
 )
 
-const (
-	retryCount   = 3
-	maxRetryTime = 60 * time.Second
+var (
+	retryCount = 3
 )
 
 // Scenario holds state for a test scenario
@@ -53,9 +52,11 @@ func (s *Scenario) CaptureRoundTrip(method, scheme, hostname, path string) error
 	var capturedResponse *http.CapturedResponse
 	var err error
 
+	var maxRetryTime = time.Duration(retryCount) * http.HTTPClientTimeout
 	err = awaitConvergence(retryCount, maxRetryTime, func(elapsed time.Duration) bool {
 		capturedRequest, capturedResponse, err = http.CaptureRoundTrip(method, scheme, hostname, path, s.IPOrFQDN)
 		if err != nil {
+			fmt.Println("Error capturing round trip:", err)
 			return false
 		}
 
