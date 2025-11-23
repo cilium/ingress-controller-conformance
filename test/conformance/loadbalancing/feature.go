@@ -52,9 +52,11 @@ func InitializeScenario(ctx *godog.ScenarioContext) {
 		resultStatus = make(map[int]sets.String, 0)
 	})
 
-	ctx.AfterScenario(func(*messages.Pickle, error) {
-		// delete namespace an all the content
-		_ = kubernetes.DeleteNamespace(kubernetes.KubeClient, state.Namespace)
+	ctx.AfterScenario(func(_ *messages.Pickle, err error) {
+		// delete namespace and all the content only if there was no failure
+		if err == nil {
+			_ = kubernetes.DeleteNamespace(kubernetes.KubeClient, state.Namespace)
+		}
 	})
 }
 
